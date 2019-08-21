@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://adminDevBook:2aH8kw.Gvc2Nx5B@devbook-e1kvy.mongodb.net/test?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://adminDevBook:2aH8kw.Gvc2Nx5B@devbook-e1kvy.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "secretSauce"
 }
