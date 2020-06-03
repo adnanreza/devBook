@@ -5,23 +5,38 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
+
 const Register = ({ setAlert, register, isAuthenticated }) => {
+  const classes = useStyles();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    password2: ''
+    password2: '',
   });
 
   const { name, email, password, password2 } = formData;
 
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
@@ -41,48 +56,64 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       <p className='lead'>
         <i className='fas fa-user' /> Create Your Account
       </p>
-      <form className='form' onSubmit={e => onSubmit(e)}>
+      <form
+        className={classes.root}
+        noValidate
+        autoComplete='off'
+        onSubmit={(e) => onSubmit(e)}
+      >
         <div className='form-group'>
-          <input
+          <TextField
+            id='outlined-required'
             type='text'
             placeholder='Name'
             value={name}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
             name='name'
           />
         </div>
         <div className='form-group'>
-          <input
+          <TextField
+            id='outlined-required'
             type='email'
             placeholder='Email Address'
             name='email'
             value={email}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
-          <small className='form-text'>
+          <div className='form-text'>
             This site uses Gravatar so if you want a profile image, use a
             Gravatar email
-          </small>
+          </div>
         </div>
         <div className='form-group'>
-          <input
+          <TextField
+            id='outlined-required'
             type='password'
             placeholder='Password'
             name='password'
             value={password}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
         </div>
         <div className='form-group'>
-          <input
+          <TextField
+            id='outlined-required'
             type='password'
             placeholder='Confirm Password'
             name='password2'
             value={password2}
-            onChange={e => onChange(e)}
+            onChange={(e) => onChange(e)}
           />
         </div>
-        <input type='submit' className='btn btn-primary' value='Register' />
+        <Button
+          variant='contained'
+          color='primary'
+          type='submit'
+          value='Register'
+        >
+          Register
+        </Button>
       </form>
       <p className='my-1'>
         Already have an account? <Link to='/login'>Log In</Link>
@@ -94,14 +125,11 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(
-  mapStateToProps,
-  { setAlert, register }
-)(Register);
+export default connect(mapStateToProps, { setAlert, register })(Register);

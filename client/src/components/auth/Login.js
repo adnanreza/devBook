@@ -4,21 +4,36 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
 
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
+
 const Login = ({ login, isAuthenticated }) => {
+  const classes = useStyles();
+
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   const { email, password } = formData;
 
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     login(email, password);
   };
@@ -34,30 +49,39 @@ const Login = ({ login, isAuthenticated }) => {
       <p className='lead'>
         <i className='fas fa-user' /> Sign in to your Account
       </p>
-      <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
-          <input
+      <form
+        className={classes.root}
+        noValidate
+        autoComplete='off'
+        onSubmit={(e) => onSubmit(e)}
+      >
+        <div>
+          <TextField
             type='email'
             placeholder='Email Address'
             name='email'
             value={email}
-            onChange={e => onChange(e)}
+            id='outlined-required'
+            onChange={(e) => onChange(e)}
             required
           />
         </div>
         <div className='form-group'>
-          <input
+          <TextField
             type='password'
             placeholder='Password'
             name='password'
             value={password}
-            onChange={e => onChange(e)}
+            id='outlined-required'
+            onChange={(e) => onChange(e)}
             minLength='6'
             required
           />
         </div>
 
-        <input type='submit' className='btn btn-primary' value='Login' />
+        <Button variant='contained' color='primary' type='submit' value='Login'>
+          Sign In
+        </Button>
       </form>
       <p className='my-1'>
         Don't have an account <Link to='/register'>Sign Up</Link>
@@ -68,14 +92,11 @@ const Login = ({ login, isAuthenticated }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(
-  mapStateToProps,
-  { login }
-)(Login);
+export default connect(mapStateToProps, { login })(Login);
